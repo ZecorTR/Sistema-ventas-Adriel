@@ -3,7 +3,7 @@
 // necesitas la IP real de tu PC porque el teléfono no tiene "localhost" propio.
 import { Platform } from 'react-native';
 
-const HOST = Platform.OS === 'web' ? 'localhost' : '192.168.1.69';
+const HOST = Platform.OS === 'web' ? 'localhost' : '192.168.1.94';
 const BASE_URL = `http://${HOST}:4000/api`;
 
 async function request(path, options = {}) {
