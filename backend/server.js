@@ -118,14 +118,37 @@ const registrarVenta = db.transaction((aceite_id, cantidad) => {
 
 app.post('/api/ventas', (req, res) => {
   const { aceite_id, cantidad } = req.body;
-  if (!aceite_id || !cantidad || cantidad <= 0) {
-    return res.status(400).json({ error: 'aceite_id y cantidad (mayor a 0) son requeridos' });
+
+  // Aceptar números o texto numérico enviado desde el formulario.
+  const esNumeroOTexto = (valor) =>
+    typeof valor === 'number' || typeof valor === 'string';
+
+  if (!esNumeroOTexto(aceite_id) || !esNumeroOTexto(cantidad)) {
+    return res.status(400).json({
+      error: 'El producto y la cantidad deben ser valores numéricos',
+    });
   }
+
+  const idAceite = Number(aceite_id);
+  const unidades = Number(cantidad);
+
+  if (!Number.isSafeInteger(idAceite) || idAceite <= 0) {
+    return res.status(400).json({
+      error: 'Selecciona un aceite válido',
+    });
+  }
+
+  if (!Number.isSafeInteger(unidades) || unidades <= 0) {
+    return res.status(400).json({
+      error: 'La cantidad debe ser un número entero mayor que cero',
+    });
+  }
+
   try {
-    const venta = registrarVenta(aceite_id, Number(cantidad));
-    res.status(201).json(venta);
+    const venta = registrarVenta(idAceite, unidades);
+    return res.status(201).json(venta);
   } catch (e) {
-    res.status(400).json({ error: e.message });
+    return res.status(400).json({ error: e.message });
   }
 });
 
