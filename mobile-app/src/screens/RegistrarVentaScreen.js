@@ -38,7 +38,7 @@ export default function RegistrarVentaScreen() {
 
   const pathname = usePathname();
   useEffect(() => {
-    if (pathname === '/') {
+    if (pathname === '/venta') {
       cargar();
     }
   }, [pathname, cargar]);
